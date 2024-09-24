@@ -75,26 +75,35 @@ class HomePage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 100,
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        height: 80,
+        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
+          // todo: add background image for each function
           // image: DecorationImage(
           //   image: AssetImage(imagePath),
           //   fit: BoxFit.cover,
+          //   colorFilter: ColorFilter.mode(Colors.grey[600]!.withOpacity(0.8), BlendMode.srcOver),
           // ),
-          color: Colors.grey[700],
+          color: Colors.grey[600],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-            padding: EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(left: 16),
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.white70,
-                fontSize: 24,
+                color: Color.fromRGBO(0xEE, 0xEE, 0xEE, 1),
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 2.0,
+                    color: Colors.black,
+                  ),
+                ],
               ),
             ),
           ),
