@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
           //   image: AssetImage(imagePath),
           //   fit: BoxFit.cover,
           // ),
-          color: Colors.grey,
+          color: Colors.grey[700],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Align(
@@ -92,7 +92,7 @@ class HomePage extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.white70,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),

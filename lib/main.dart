@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green[800]!),
       ),
       home: MainNavigationPage(),
     );
@@ -38,7 +38,11 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_getTitle()),
+        title: Text(
+          _getTitle(), // get current page title
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -49,24 +53,37 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'User'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Bow Data',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
         ],
       ),
     );
   }
 
+  // Get current page title
   String _getTitle() {
     switch (_currentIndex) {
+      // Home
       case 0:
-        return 'Home';
+        return 'App Name';
+      // User
       case 1:
-        return 'User';
+        return 'Bow Data';
+      // Settings
       case 2:
         return 'Settings';
       default:
-        return 'My App';
+        return 'App Name';
     }
   }
 }
