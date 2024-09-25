@@ -65345,7 +65345,7 @@ A.Ae.prototype={
 L(a){var s=null
 return A.jH(new A.eO("Delay Camera",s),A.eG(A.f4("Functionality to be implemented",s),s,s),s)}}
 A.Bh.prototype={
-L(a){var s=this,r="assets/func_banner_temp.jpg",q=null
+L(a){var s=this,r="images/func_banner_temp.jpg",q=null
 return A.adY(A.b([s.k5(a,"Archery Introduction",r,new A.z7(q)),s.k5(a,"Slow Motion Camera",r,new A.Et(q)),s.k5(a,"Delay Camera",r,new A.Ae(q)),s.k5(a,"Posture Detection",r,new A.D_(q)),s.k5(a,"Score Notes",r,new A.DX(q)),s.k5(a,"Score Analysis",r,new A.DW(q)),s.k5(a,"Timer",r,new A.EX(q))],t.F))},
 k5(a,b,c,d){var s=null,r=A.alj(new A.PW(A.M(102,0,0,0),B.cE),B.x7,new A.pT(c),s),q=A.zm(12)
 return A.n5(s,A.mQ(s,new A.eD(B.jo,s,s,new A.eX(new A.be(16,0,0,0),A.f4(b,A.m1(s,s,A.acA(238,238,238,1),s,s,s,s,s,s,s,s,18,s,s,B.bC,s,s,!0,s,s,s,s,s,A.b([new A.ik(B.n,new A.n(1,1),2)],t.kO),s,s)),s),s),s,new A.dm(B.c8,r,s,q,s,s,B.aP),64,new A.be(16,8,16,8),s,s),B.au,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.RA(a,d),s,s,s)}}
