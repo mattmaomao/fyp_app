@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.4),
-              BlendMode.srcOver,
+              BlendMode.darken,
             ),
           ),
           color: Colors.grey[600],
