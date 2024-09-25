@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '<App Name>',
+      title: APP_NAME,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -100,7 +100,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     switch (_currentIndex) {
       // Home
       case 0:
-        return '<App Name>';
+        return APP_NAME;
       // User
       case 1:
         return 'Bow Data';
@@ -108,7 +108,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
       case 2:
         return 'Settings';
       default:
-        return '<App Name>';
+        return APP_NAME;
     }
   }
 }

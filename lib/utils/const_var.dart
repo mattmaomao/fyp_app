@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// App Name
+const String APP_NAME = 'Archery Smart';
+
 // Colors
 const Color PRI_COLOR = Colors.amber;
 const Color SEC_COLOR = Color.fromARGB(255, 40, 179, 47);
