@@ -1,9 +1,10 @@
 // main.dart
 import 'package:flutter/material.dart';
-import 'const_var.dart';
-import 'pages/home.dart';
-import 'pages/user.dart';
-import 'pages/settings.dart';
+import 'package:fyp_app/utils/const_var.dart';
+import 'package:fyp_app/pages/home.dart';
+import 'package:fyp_app/pages/user.dart';
+import 'package:fyp_app/pages/settings.dart';
+import 'package:fyp_app/utils/header_with_title.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,22 +45,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // header
-      appBar: AppBar(
-        title: Text(
-          _getTitle(), // get current page title
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: DARK_PRI_COLOR,
-        shape: Border(
-          bottom: BorderSide(
-            color: Colors.black38,
-            width: 2,
-          ),
-        ),
-      ),
+      appBar: HeaderWithTitle(title: _getTitle()),
 
       // content
       body: _pages[_currentIndex],
@@ -78,6 +64,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
           backgroundColor: DARK_PRI_COLOR,
           currentIndex: _currentIndex,
           selectedItemColor: SEC_COLOR,
+          unselectedItemColor: Colors.black87,
           onTap: (index) {
             setState(() {
               _currentIndex = index;

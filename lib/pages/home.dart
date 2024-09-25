@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 80,
+        height: 64,
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
           // todo: add background image for each function
@@ -98,7 +98,7 @@ class HomePage extends StatelessWidget {
               text,
               style: TextStyle(
                 color: Color.fromRGBO(0xEE, 0xEE, 0xEE, 1),
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 shadows: [
                   Shadow(
