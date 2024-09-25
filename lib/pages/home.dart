@@ -79,13 +79,16 @@ class HomePage extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
           // todo: add background image for each function
-          // image: DecorationImage(
-          //   image: AssetImage(imagePath),
-          //   fit: BoxFit.cover,
-          //   colorFilter: ColorFilter.mode(Colors.grey[600]!.withOpacity(0.8), BlendMode.srcOver),
-          // ),
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.4),
+              BlendMode.srcOver,
+            ),
+          ),
           color: Colors.grey[600],
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Align(
           alignment: Alignment.centerLeft,
@@ -99,7 +102,7 @@ class HomePage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 shadows: [
                   Shadow(
-                    offset: Offset(1.0, 1.0),
+                    offset: Offset(1, 1),
                     blurRadius: 2.0,
                     color: Colors.black,
                   ),
