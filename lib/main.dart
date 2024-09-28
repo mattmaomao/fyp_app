@@ -5,8 +5,12 @@ import 'package:fyp_app/pages/home.dart';
 import 'package:fyp_app/pages/user.dart';
 import 'package:fyp_app/pages/settings.dart';
 import 'package:fyp_app/utils/header_with_title.dart';
+import 'package:camera/camera.dart';
+import 'package:fyp_app/pages/delay_cam.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
   runApp(MyApp());
 }
 
