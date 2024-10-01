@@ -54,10 +54,26 @@ class TimerMain extends StatefulWidget {
 
 class _TimerMainState extends State<TimerMain> {
   int _currentIndex = 0;
-  List<Widget> _pages = [
-    TimerSetting(),
-    TimerCountDown(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      TimerSetting(toTimerSceen: () {
+        setState(() {
+          _currentIndex = 1;
+        });
+      }),
+      TimerCountDown(
+        toTimerSetting: () {
+          setState(() {
+            _currentIndex = 0;
+          });
+        },
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +87,9 @@ class _TimerMainState extends State<TimerMain> {
 }
 
 class TimerSetting extends StatefulWidget {
+  final VoidCallback toTimerSceen;
+  TimerSetting({required this.toTimerSceen});
+
   @override
   State<TimerSetting> createState() => _TimerSettingState();
 }
@@ -162,7 +181,6 @@ class _TimerSettingState extends State<TimerSetting> {
                       } else {
                         timerData.readySec = int.parse(value);
                         _readyController.text = timerData.readySec.toString();
-                        ;
                       }
                     },
                   ),
@@ -208,10 +226,7 @@ class _TimerSettingState extends State<TimerSetting> {
             // start button
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TimerCountDown()),
-                );
+                widget.toTimerSceen();
               },
               child: Text('Start Timer'),
             ),
@@ -223,10 +238,8 @@ class _TimerSettingState extends State<TimerSetting> {
 }
 
 class TimerCountDown extends StatefulWidget {
-  // final int seconds;
-  // final bool rounded;
-
-  // const TimerCountDown({required this.seconds, required this.rounded});
+  final VoidCallback toTimerSetting;
+  TimerCountDown({required this.toTimerSetting});
 
   @override
   _TimerCountDownState createState() => _TimerCountDownState();
@@ -234,84 +247,118 @@ class TimerCountDown extends StatefulWidget {
 
 class _TimerCountDownState extends State<TimerCountDown> {
   late Timer _timer;
+  late TimerData _timerData;
+  bool firstInit = false;
+
   bool _isRunning = false;
-  int _currentSec = 10;
-  int _prepareTime = TimerData().prepSec;
-  int _readyTime = TimerData().readySec;
-  int _endTime = TimerData().endSec;
+  int _displaySec = -1;
+  int _currentSec = -1;
+  int _prepareTime = -1;
+  int _readyTime = -1;
+  int _endTime = -1;
   // AudioCache _audioCache = AudioCache();
 
   @override
-  void initState() {
-    super.initState();
-    _currentSec = _endTime;
+  void dispose() {
+    if (_isRunning) {
+      _timer.cancel();
+    }
+    super.dispose();
   }
 
   void startTimer() {
+    _initTimer();
+    print('prepare Time: $_prepareTime');
+    print('ready Time: $_readyTime');
+    print('end Time: $_endTime');
+    setState(() {
+      _isRunning = true;
+    });
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _currentSec++;
         // _audioCache.play('beep.mp3');
         if (_prepareTime > 0) {
           _prepareTime--;
+          _displaySec = _prepareTime;
         } else if (_readyTime > 0) {
           // _audioCache.play('beep.mp3');
           _readyTime--;
+          _displaySec = _readyTime;
         } else if (_endTime > 0) {
           // _audioCache.play('beep.mp3');
           _endTime--;
+          _displaySec = _endTime;
         } else {
           // _audioCache.play('beep.mp3');
-          _resetTimer();
+          _initTimer();
         }
       });
     });
   }
 
   void pauseTimer() {
-    _timer.cancel();
-    _isRunning = false;
+    if (_isRunning) {
+      _timer.cancel();
+    }
+    setState(() {
+      _isRunning = false;
+    });
   }
 
-  void _resetTimer() {
-    _timer.cancel();
+  void _initTimer() {
+    if (_isRunning) {
+      _timer.cancel();
+    }
+    if (!firstInit) {
+      resetCounter();
+    } else {
+      setState(() {
+        resetCounter();
+      });
+    }
+  }
+
+  void resetCounter() {
     _isRunning = false;
-    setState(() {
-      _currentSec = 0;
-      _prepareTime = TimerData().prepSec;
-      _readyTime = TimerData().readySec;
-      _endTime = TimerData().endSec;
-    });
+    _currentSec = 0;
+    _prepareTime = _timerData.prepSec;
+    _readyTime = _timerData.readySec;
+    _endTime = _timerData.endSec;
+    _displaySec = _prepareTime;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('$_currentSec s'),
-        ElevatedButton(
-          onPressed: () {
-            if (!_isRunning) {
-              startTimer();
-              _isRunning = true;
-            } else {
-              pauseTimer();
-            }
-          },
-          child: Text(_isRunning ? 'Pause' : 'Start'),
-        ),
-        ElevatedButton(
-          onPressed: _resetTimer,
-          child: Text('Reset'),
-        ),
-      ],
-    );
-  }
+    return Consumer<TimerData>(
+      builder: (context, timerData, child) {
+        _timerData = timerData;
+        if (!firstInit) {
+          _initTimer();
+          firstInit = true;
+        }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('$_displaySec s'),
+            ElevatedButton(
+              onPressed: () {
+                if (!_isRunning) {
+                  startTimer();
+                } else {
+                  pauseTimer();
+                }
+              },
+              child: Text(_isRunning ? 'Pause' : 'Start'),
+            ),
+            ElevatedButton(
+              onPressed: _initTimer,
+              child: Text('Reset'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
