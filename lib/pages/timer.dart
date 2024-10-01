@@ -101,12 +101,12 @@ class _TimerSettingState extends State<TimerSetting> {
 
   @override
   Widget build(BuildContext context) {
-    _prepController.text = TimerData().prepSec.toString();
-    _readyController.text = TimerData().readySec.toString();
-    _endController.text = TimerData().endSec.toString();
-
     return Consumer<TimerData>(
       builder: (context, timerData, child) {
+        _prepController.text = timerData.prepSec.toString();
+        _readyController.text = timerData.readySec.toString();
+        _endController.text = timerData.endSec.toString();
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -338,25 +338,74 @@ class _TimerCountDownState extends State<TimerCountDown> {
           firstInit = true;
         }
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('$_displaySec s'),
-            ElevatedButton(
-              onPressed: () {
-                if (!_isRunning) {
-                  startTimer();
-                } else {
-                  pauseTimer();
-                }
-              },
-              child: Text(_isRunning ? 'Pause' : 'Start'),
-            ),
-            ElevatedButton(
-              onPressed: _initTimer,
-              child: Text('Reset'),
-            ),
-          ],
+        return Container(
+          height: 280,
+          decoration: BoxDecoration(
+              // color: Colors.cyan, // debug
+              ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // timer display
+              Container(
+                margin: EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.black,
+                ),
+                child: Text(
+                  '${(_displaySec ~/ 60).toString().padLeft(2, '0')} : ${(_displaySec % 60).toString().padLeft(2, '0')}',
+                  style: TextStyle(
+                    fontSize: 72,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              // buttons
+              Container(
+                decoration: BoxDecoration(
+                    // color: Colors.pink, // debug
+                    ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        if (!_isRunning) {
+                          startTimer();
+                        } else {
+                          pauseTimer();
+                        }
+                      },
+                      child: Text(_isRunning ? 'Pause' : 'Start'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _initTimer,
+                      child: Text('Reset'),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    // color: Colors.pink, // debug
+                    ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        widget.toTimerSetting();
+                      },
+                      child: Text('Setting'),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         );
       },
     );
