@@ -6,7 +6,6 @@ import 'package:camera/camera.dart';
 
 late List<CameraDescription> cameras;
 
-
 class DelayCamPage extends StatefulWidget {
   const DelayCamPage({super.key});
 
@@ -14,8 +13,7 @@ class DelayCamPage extends StatefulWidget {
   State<DelayCamPage> createState() => _DelayCamPageState();
 }
 
-class _DelayCamPageState extends State<DelayCamPage>{
-
+class _DelayCamPageState extends State<DelayCamPage> {
   late CameraController controller;
   late Future<void> cameravalue;
   XFile? _latestFrame;
@@ -23,24 +21,44 @@ class _DelayCamPageState extends State<DelayCamPage>{
 
   @override
   void initState() {
-     super.initState();
+    super.initState();
+    print("init state");
     controller = CameraController(cameras[0], ResolutionPreset.high);
     cameravalue = controller.initialize();
     cameravalue.then((_) {
+      print("enter then");
       if (!mounted) {
+        print("!mounted");
         return;
       }
-      controller.startImageStream((image){
-        _frameBuffer.add(image as XFile);
+      print("mounted");
+      controller.startImageStream((image) {
+        print("enter start image stream");
+        try {
+          _frameBuffer.add(image as XFile);
+        } catch (e) {
+          print("Error: $e");
+        }
         if (_frameBuffer.length > 5) {
-        _frameBuffer.removeAt(0); // Remove the oldest frame
-      }
+          print("remove oldest frame");
+          _frameBuffer.removeAt(0); // Remove the oldest frame
+        }
       });
+      print("before set state");
       setState(() {
+        print("delay 3 sec");
         Future.delayed(Duration(seconds: 3));
-        _latestFrame = _frameBuffer.first;});
+        print("set latest frame");
+        print("$_latestFrame");
+        print("$_frameBuffer");
+        print("${_frameBuffer.isNotEmpty}");
+        if (_frameBuffer.isNotEmpty) _latestFrame = _frameBuffer.first;
+        // _latestFrame = _frameBuffer.first;
+        print("bruh");
+      });
+      print("after set state");
     });
-  }    
+  }
 
   @override
   void dispose() {
@@ -53,14 +71,18 @@ class _DelayCamPageState extends State<DelayCamPage>{
     return Scaffold(
       appBar: HeaderWithTitle(title: 'Delay Camera'),
       body: FutureBuilder<void>(
-          future: cameravalue, 
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
+        future: cameravalue,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            print("connection done");
+            if (_latestFrame != null) {
               return Image.file(File(_latestFrame!.path));
             }
+          }
+          print("connection fk");
           return Center(child: CircularProgressIndicator());
         },
-        ),
-      );
+      ),
+    );
   }
 }

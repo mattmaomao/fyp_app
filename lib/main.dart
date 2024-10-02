@@ -10,7 +10,11 @@ import 'package:fyp_app/pages/delay_cam.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
+  try {
+    cameras = await availableCameras();
+  } catch (e) {
+    print('Error: $e');
+  }
   runApp(MyApp());
 }
 
