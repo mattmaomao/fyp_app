@@ -158,7 +158,7 @@ class _TimerSettingState extends State<TimerSetting> {
                         _prepController.text = '0';
                       } else {
                         timerData.prepSec = int.parse(value);
-                        _prepController.text = timerData.prepSec.toString();
+                        // _prepController.text = timerData.prepSec.toString();
                       }
                     },
                   ),
@@ -180,7 +180,7 @@ class _TimerSettingState extends State<TimerSetting> {
                         _readyController.text = '0';
                       } else {
                         timerData.readySec = int.parse(value);
-                        _readyController.text = timerData.readySec.toString();
+                        // _readyController.text = timerData.readySec.toString();
                       }
                     },
                   ),
@@ -202,7 +202,7 @@ class _TimerSettingState extends State<TimerSetting> {
                         _endController.text = '0';
                       } else {
                         timerData.endSec = int.parse(value);
-                        _endController.text = timerData.endSec.toString();
+                        // _endController.text = timerData.endSec.toString();
                       }
                     },
                   ),
