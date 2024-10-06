@@ -45,6 +45,13 @@ class TimerData extends ChangeNotifier {
     _rounded = newValue;
     notifyListeners();
   }
+
+  bool _isRoundA = true; //defalut value
+  bool get isRoundA => _isRoundA;
+  set isRoundA(bool newValue) {
+    _isRoundA = newValue;
+    notifyListeners();
+  }
 }
 
 class TimerMain extends StatefulWidget {
@@ -98,14 +105,23 @@ class _TimerSettingState extends State<TimerSetting> {
   final TextEditingController _prepController = TextEditingController();
   final TextEditingController _readyController = TextEditingController();
   final TextEditingController _endController = TextEditingController();
+  bool initializedText = false;
+
+  void initText(TimerData timerData) {
+    if (initializedText) {
+      return;
+    }
+    initializedText = true;
+    _prepController.text = timerData.prepSec.toString();
+    _readyController.text = timerData.readySec.toString();
+    _endController.text = timerData.endSec.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TimerData>(
       builder: (context, timerData, child) {
-        _prepController.text = timerData.prepSec.toString();
-        _readyController.text = timerData.readySec.toString();
-        _endController.text = timerData.endSec.toString();
+        initText(timerData);
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -118,13 +134,39 @@ class _TimerSettingState extends State<TimerSetting> {
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.black,
               ),
-              child: Text(
-                '${(timerData.endSec ~/ 60).toString().padLeft(2, '0')} : ${(timerData.endSec % 60).toString().padLeft(2, '0')}',
-                style: TextStyle(
-                  fontSize: 72,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                ),
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    timerData.endSec.toString().padLeft(4, '0'),
+                    style: TextStyle(
+                      letterSpacing: 12,
+                      fontSize: 80,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text('A',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          )),
+                      Text('B',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          )),
+                    ],
+                  ),
+                ],
               ),
             ),
             // setting options
@@ -136,15 +178,19 @@ class _TimerSettingState extends State<TimerSetting> {
               ),
               child: GridView.count(
                 crossAxisCount: 2,
-                crossAxisSpacing: 8, // spacing between col
-                mainAxisSpacing: 8, // spacing between row
+                crossAxisSpacing: 32, // spacing between col
+                mainAxisSpacing: 4, // spacing between row
                 shrinkWrap: true,
                 children: <Widget>[
                   TextField(
                     controller: _prepController,
                     decoration: InputDecoration(
-                      helperText: 'prepare time',
-                      // hintText: timerData.prepSec.toString(),
+                      labelText: 'Prepare Time',
+                      labelStyle: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      suffix: Text('(Sec)', style: TextStyle(fontSize: 12)),
                     ),
                     // only accept number input
                     keyboardType: TextInputType.number,
@@ -158,15 +204,18 @@ class _TimerSettingState extends State<TimerSetting> {
                         _prepController.text = '0';
                       } else {
                         timerData.prepSec = int.parse(value);
-                        // _prepController.text = timerData.prepSec.toString();
                       }
                     },
                   ),
                   TextField(
                     controller: _readyController,
                     decoration: InputDecoration(
-                      helperText: 'ready time',
-                      // hintText: timerData.readySec.toString(),
+                      labelText: 'Ready Time',
+                      labelStyle: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      suffix: Text('(Sec)', style: TextStyle(fontSize: 12)),
                     ),
                     // only accept number input
                     keyboardType: TextInputType.number,
@@ -180,15 +229,18 @@ class _TimerSettingState extends State<TimerSetting> {
                         _readyController.text = '0';
                       } else {
                         timerData.readySec = int.parse(value);
-                        // _readyController.text = timerData.readySec.toString();
                       }
                     },
                   ),
                   TextField(
                     controller: _endController,
                     decoration: InputDecoration(
-                      helperText: 'end time',
-                      // hintText: timerData.endSec.toString(),
+                      labelText: 'End Time',
+                      labelStyle: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      suffix: Text('(Sec)', style: TextStyle(fontSize: 12)),
                     ),
                     // only accept number input
                     keyboardType: TextInputType.number,
@@ -202,33 +254,30 @@ class _TimerSettingState extends State<TimerSetting> {
                         _endController.text = '0';
                       } else {
                         timerData.endSec = int.parse(value);
-                        // _endController.text = timerData.endSec.toString();
                       }
                     },
                   ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text("Rounded?"),
-                        Switch(
-                          value: timerData.rounded,
-                          onChanged: (value) {
-                            timerData.rounded = value;
-                          },
-                        ),
-                      ],
-                    ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Rounded?"),
+                      Switch(
+                        value: timerData.rounded,
+                        onChanged: (value) {
+                          timerData.rounded = value;
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            // start button
+            // confirm button
             ElevatedButton(
               onPressed: () {
                 widget.toTimerSceen();
               },
-              child: Text('Start Timer'),
+              child: Text('Confirm'),
             ),
           ],
         );
@@ -252,7 +301,6 @@ class _TimerCountDownState extends State<TimerCountDown> {
 
   bool _isRunning = false;
   int _displaySec = -1;
-  int _currentSec = -1;
   int _prepareTime = -1;
   int _readyTime = -1;
   int _endTime = -1;
@@ -268,15 +316,11 @@ class _TimerCountDownState extends State<TimerCountDown> {
 
   void startTimer() {
     _initTimer();
-    print('prepare Time: $_prepareTime');
-    print('ready Time: $_readyTime');
-    print('end Time: $_endTime');
     setState(() {
       _isRunning = true;
     });
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        _currentSec++;
         // _audioCache.play('beep.mp3');
         if (_prepareTime > 0) {
           _prepareTime--;
@@ -289,8 +333,13 @@ class _TimerCountDownState extends State<TimerCountDown> {
           // _audioCache.play('beep.mp3');
           _endTime--;
           _displaySec = _endTime;
+        } else if (_timerData.rounded && _timerData.isRoundA) {
+          // _audioCache.play('beep.mp3');
+          resetCounter();
+          _timerData.isRoundA = false;
         } else {
           // _audioCache.play('beep.mp3');
+          _timerData.isRoundA = true;
           _initTimer();
         }
       });
@@ -321,11 +370,16 @@ class _TimerCountDownState extends State<TimerCountDown> {
 
   void resetCounter() {
     _isRunning = false;
-    _currentSec = 0;
     _prepareTime = _timerData.prepSec;
     _readyTime = _timerData.readySec;
     _endTime = _timerData.endSec;
     _displaySec = _prepareTime;
+
+    // auto start again if is round A
+    if (_timerData.rounded && _timerData.isRoundA) {
+      _isRunning = true;
+      _prepareTime = 0;
+    }
   }
 
   @override
@@ -354,13 +408,38 @@ class _TimerCountDownState extends State<TimerCountDown> {
                   borderRadius: BorderRadius.circular(8),
                   color: Colors.black,
                 ),
-                child: Text(
-                  '${(_displaySec ~/ 60).toString().padLeft(2, '0')} : ${(_displaySec % 60).toString().padLeft(2, '0')}',
-                  style: TextStyle(
-                    fontSize: 72,
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      _displaySec.toString().padLeft(4, '0'),
+                      style: TextStyle(
+                        letterSpacing: 12,
+                        fontSize: 80,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(timerData.isRoundA ? 'A' : '',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            )),
+                        Text(timerData.isRoundA ? '' : 'B',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            )),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               // buttons
